@@ -3,10 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "prerun": "npm run i18n-locales && npm run i18n-clean && npm run roots",
+    "dev": "npm run prerun && next dev",
+    "build": "npm run prerun && next build",
+    "start": "npm run prerun && next start",
+    "lint": "next lint",
+    "i18n-locales": "node i18nLocales.js",
+    "i18n": "i18nexus pull",
+    "i18n-clean": "i18nexus pull --clean",
+    "roots": "npx next-roots",
+    "roots:watch": "npx next-roots -w"
   },
   "dependencies": {
     "@types/node": "20.6.2",
@@ -15,11 +21,25 @@
     "autoprefixer": "10.4.15",
     "eslint": "8.49.0",
     "eslint-config-next": "13.5.1",
+    "i18next": "^23.12.2",
+    "i18next-resources-to-backend": "^1.2.1",
     "next": "13.5.1",
+    "next-i18n-router": "^5.5.1",
+    "next-roots": "^3.10.1",
     "postcss": "8.4.30",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-i18next": "^15.0.0",
     "tailwindcss": "3.3.3",
     "typescript": "5.2.2"
+  },
+  "devDependencies": {
+    "esbuild": "^0.23.0",
+    "esbuild-node-externals": "^1.14.0",
+    "exbuild": "^0.2.2",
+    "i18nexus-cli": "^3.5.0",
+    "node-watch": "^0.7.4",
+    "parse-typed-args": "^0.2.0",
+    "path-to-regexp": "^7.1.0"
   }
 }
