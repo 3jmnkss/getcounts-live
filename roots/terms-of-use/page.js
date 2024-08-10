@@ -1,19 +1,29 @@
 import Image from 'next/image';
 import ExampleClientComponent from '@/components/ExampleClientComponent';
+import LanguageChanger from '@/components/LanguageChanger';
 import initTranslations from '../i18nController';
-import {router} from '../roots-router'
+import {rootsRouter} from '../roots-router'
+import TranslationsProvider from '@/components/TranslationsProvider';
 
-export default async function Home({
+const i18nNamespaces = ['default'];
+
+export default async function TermsOfUse({
   params,
   pageHref
 }) {
-  const pageLocale = router.getLocaleFromHref(pageHref)
-  const { t } = await initTranslations(pageLocale, ['default']);
+  const currentLocale = rootsRouter.getLocaleFromHref(pageHref)
+  const { t, resources } = await initTranslations(currentLocale, i18nNamespaces);
 
   return (
-    <main className={[]}>
-      <h1>{t('chamada0')}</h1>
-      <ExampleClientComponent />
-    </main>
+    <TranslationsProvider
+      namespaces={i18nNamespaces}
+      locale={currentLocale}
+      resources={resources}>
+      <main className={[]}>
+        <h1>{t('chamada0')}</h1>
+        <ExampleClientComponent />
+        <LanguageChanger {...{pageHref, currentLocale}} />
+      </main>
+    </TranslationsProvider>
   );
 }

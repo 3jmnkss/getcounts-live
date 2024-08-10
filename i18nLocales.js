@@ -10,7 +10,6 @@ console.log(getDirectories("locales"))
 function setEnvValue(key, value) {
 
     const ENV_VARS = fs.readFileSync("./.env", "utf8").replace(/\r\n/g, "\n").split('\n');
-    console.log(ENV_VARS)
 
     const target = ENV_VARS.indexOf(ENV_VARS.find((line) => {
         return line.match(new RegExp(key));
@@ -27,6 +26,6 @@ function setEnvValue(key, value) {
 
 }
 
-setEnvValue("LOCALES", getDirectories("locales"));
+setEnvValue("NEXT_PUBLIC_LOCALES", getDirectories("locales"));
 
 console.log(fs.readFileSync('./.env', { encoding: 'utf8', flag: 'r' }))
