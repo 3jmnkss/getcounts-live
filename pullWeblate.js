@@ -1,9 +1,11 @@
 require('dotenv').config()
 const fs = require('fs')
 const axios = require('axios');
+const decompress = require("decompress");
 
 const args = process.argv.slice(2);
 
+const localesFolder = "locales"
 let MODO_DEBUG = false;
 if (args.includes('--debug')) {
     console.log('A opção --debug foi passada.');
@@ -12,11 +14,11 @@ if (args.includes('--debug')) {
 // Verifica se '--clear' está presente nos argumentos
 if (args.includes('--clear')) {
     console.log('A opção --clear foi passada.');
-    fs.rmSync("locales", { recursive: true, force: true });
+    fs.rmSync(localesFolder, { recursive: true, force: true });
 } else console.log('A opção --clear NÃO foi passada.');
 
 // URL do endpoint que você deseja consultar
-const baseURL = process.env.WEBLATE_API_URL;
+const baseURL = process.env.WEBLATE_API_URL + "/projects/" + process.env.WEBLATE_PROJECT_SLUG;
 // Configuração de autorização
 const authConfig = {
     headers: {
@@ -26,14 +28,9 @@ const authConfig = {
 
 // Função para fazer a consulta usando axios
 const consultarEndpoint = async ({ endpoint = "" } = {}) => {
-    try {
-        const resposta = await axios.get(baseURL + endpoint + '/', authConfig);
-        MODO_DEBUG && console.log('Dados recebidos:', resposta.data);
-        return resposta.data;
-    } catch (erro) {
-        console.error('Erro ao consultar o endpoint:', erro);
-        throw Error('Falha ao obter traduções do servidor Weblate.')
-    }
+    const resposta = await axios.get(baseURL + endpoint + '/', authConfig);
+    MODO_DEBUG && console.log('Dados recebidos:', resposta.data);
+    return resposta.data;
 };
 
 const setEnvValue = (key, value) => {
@@ -55,6 +52,28 @@ const setEnvValue = (key, value) => {
 
 }
 
+const downloadFile = async (url, filePath) => {
+    // Faz a solicitação HTTP para o URL fornecido
+    const response = await axios({
+        url,
+        method: 'GET',
+        responseType: 'stream', // Importante para baixar arquivos
+        ...authConfig
+    });
+
+    // Cria um fluxo de escrita no caminho do arquivo local
+    const writer = fs.createWriteStream(filePath);
+
+    // Pipe o fluxo de resposta para o fluxo de escrita
+    response.data.pipe(writer);
+
+    // Retorna uma Promise que será resolvida quando o download for concluído
+    return new Promise((resolve, reject) => {
+        writer.on('finish', resolve);
+        writer.on('error', reject);
+    });
+}
+
 // const getDirectories = source =>
 //     fs.readdirSync(source, { withFileTypes: true })
 //         .filter(dirent => dirent.isDirectory())
@@ -63,16 +82,32 @@ const setEnvValue = (key, value) => {
 // console.log(getDirectories("locales"))
 
 const main = async () => {
-    console.log("Baixando traduções...")
-    // Executar a função
-    MODO_DEBUG && console.log(await consultarEndpoint());
+    try {
+        // Executar a função
+        MODO_DEBUG && console.log(await consultarEndpoint());
 
-    const idiomas = await consultarEndpoint({ endpoint: "/projects/" + process.env.WEBLATE_PROJECT_SLUG + "/languages" });
-    const locales = idiomas.map(i => i.code)
-    console.log(locales)
+        console.log("Atualizando lista de idiomas...")
+        const idiomas = await consultarEndpoint({ endpoint: "/languages" });
+        const locales = idiomas.map(i => i.code)
+        console.log(locales)
 
-    console.log("Processando .env...")
-    setEnvValue("NEXT_PUBLIC_LOCALES", locales);
-    MODO_DEBUG && console.log("NOVO .env...", fs.readFileSync('./.env', { encoding: 'utf8', flag: 'r' }))
+        console.log("Processando .env...")
+        setEnvValue("NEXT_PUBLIC_LOCALES", locales);
+        MODO_DEBUG && console.log("NOVO .env...", fs.readFileSync('./.env', { encoding: 'utf8', flag: 'r' }))
+
+        const zipName = "traducoes.zip"
+        process.stdout.write("Baixando traduções...")
+        await downloadFile(baseURL + "/file/?format=zip", zipName)
+        process.stdout.write(" Sucesso!\n")
+
+        console.log("Descomprimindo traduções...")
+        const arquivos = await decompress("traducoes.zip", localesFolder)
+        process.stdout.write(" Sucesso!\n")
+        MODO_DEBUG && console.log(arquivos)
+    }
+    catch (err) {
+        console.error(err)
+        throw Error("Falha ao atualizar traduções: " + err.message)
+    }
 }
 main()

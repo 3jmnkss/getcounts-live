@@ -3,14 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "prerun": "npm run i18n-clean && npm run roots",
+    "prerun": "npm run i18n && npm run roots",
     "dev": "npm run prerun && next dev",
     "build": "npm run prerun && next build",
     "start": "npm run prerun && next start",
     "lint": "next lint",
-    "i18n-locales": "node i18nLocales.js",
     "i18n": "node pullWeblate.js",
-    "i18n-clean": "node pullWeblate.js --clear",
     "roots": "npx next-roots",
     "roots:watch": "npx next-roots -w"
   },
@@ -35,6 +33,7 @@
   },
   "devDependencies": {
     "axios": "^1.7.3",
+    "decompress": "^4.2.1",
     "dotenv": "^16.4.5",
     "esbuild": "^0.23.0",
     "esbuild-node-externals": "^1.14.0",
