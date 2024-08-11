@@ -5,7 +5,7 @@ import initTranslations from '../i18nController';
 import {rootsRouter} from '../roots-router'
 import TranslationsProvider from '@/components/TranslationsProvider';
 
-const i18nNamespaces = ['default'];
+const i18nNamespaces = ['home'];
 
 export default async function TermsOfUse({
   params,
@@ -20,7 +20,7 @@ export default async function TermsOfUse({
       locale={currentLocale}
       resources={resources}>
       <main className={[]}>
-        <h1>{t('chamada0')}</h1>
+        <h1>{t('home-info-h2')}</h1>
         <ExampleClientComponent />
         <LanguageChanger {...{pageHref, currentLocale}} />
       </main>

@@ -2,7 +2,7 @@
 const path = require('path')
 const i18nConfig = require('./i18nConfig');
 
-console.log(i18nConfig)
+console.log("CONFIG I18N",i18nConfig)
 
 module.exports = {
   // where original routes are placed

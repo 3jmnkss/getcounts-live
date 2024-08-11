@@ -18,7 +18,7 @@ if (args.includes('--clear')) {
 } else console.log('A opção --clear NÃO foi passada.');
 
 // URL do endpoint que você deseja consultar
-const baseURL = process.env.WEBLATE_API_URL + "/projects/" + process.env.WEBLATE_PROJECT_SLUG;
+const baseURL = process.env.WEBLATE_API_URL + "/projects/" + process.env.NEXT_PUBLIC_WEBLATE_PROJECT_SLUG;
 // Configuração de autorização
 const authConfig = {
     headers: {
@@ -100,7 +100,7 @@ const main = async () => {
         await downloadFile(baseURL + "/file/?format=zip", zipName)
         process.stdout.write(" Sucesso!\n")
 
-        console.log("Descomprimindo traduções...")
+        process.stdout.write("Descomprimindo traduções...")
         const arquivos = await decompress("traducoes.zip", localesFolder)
         process.stdout.write(" Sucesso!\n")
         MODO_DEBUG && console.log(arquivos)

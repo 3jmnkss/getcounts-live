@@ -1,6 +1,9 @@
-// in roots/(auth)/login/i18n.js
-module.exports.routeNames = [
-    { locale: 'pt', path: 'termos-de-uso' },
-    { locale: 'hi', path: 'upayog-kee-sharten' },
-    // you don't need to specify "en" translation as long as it matches the route folder name
-  ]
+import { getRouteI18N } from '../i18nController'
+
+console.log("GERANDO ROTAS EM PRODUÇÃO?", process.env.NODE_ENV === 'production')
+
+export async function generateRouteNames() {
+  const routes = await getRouteI18N('terms-of-use-slug')
+  console.log("ROTAS I18N", "'terms-of-use-slug'", routes)
+  return routes;
+}

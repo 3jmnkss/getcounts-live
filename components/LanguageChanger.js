@@ -17,7 +17,11 @@ export default function LanguageChanger({pageHref, currentLocale}) {
     const expires = date.toUTCString();
     document.cookie = `NEXT_LOCALE=${newLocale};expires=${expires};path=/`;
 
-    console.log("indo para", rootsRouter.getRouteFromHref(pageHref), rootsRouter.getHref(rootsRouter.getRouteFromHref(pageHref)?.name, { locale: newLocale }))
+    console.log("indo para", newLocale, rootsRouter, 
+      rootsRouter.getRouteFromHref(pageHref), 
+      rootsRouter.getHref(rootsRouter.getRouteFromHref(pageHref)?.name, { locale: newLocale }),
+      encodeURI(rootsRouter.getHref(rootsRouter.getRouteFromHref(pageHref)?.name, { locale: newLocale }))
+    )
     router.push(rootsRouter.getHref(rootsRouter.getRouteFromHref(pageHref)?.name, { locale: newLocale }));
 
     router.refresh();

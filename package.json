@@ -1,16 +1,21 @@
 {
-  "name": "nextjs",
+  "name": "getcounts.live",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "prerun": "npm run i18n && npm run roots",
+    "prerun": "npm run del-next-cache && npm run i18n && npm run roots",
+    "del-next-cache": "node delNextCache.js",
     "dev": "npm run prerun && next dev",
-    "build": "npm run prerun && next build",
-    "start": "npm run prerun && next start",
+    "fastdev": "npm run roots && next dev",
+    "build": "cross-env NODE_ENV=production npm run prerun && next build",
+    "builddev": "cross-env BASE_PATH=/getcounts-live npm run build",
+    "fastbuild": "npm run roots && next build",
+    "start": "next start",
     "lint": "next lint",
     "i18n": "node pullWeblate.js",
     "roots": "npx next-roots",
-    "roots:watch": "npx next-roots -w"
+    "roots:watch": "npx next-roots -w",
+    "windeploy": "del out.tar && 7z a -bb3 -ttar out.tar out && ssh elias@31.133.100.204 rm -rf /DOCKER/dev-httpd/site/getcounts-live && scp -v out.tar elias@31.133.100.204:/tmp && ssh elias@31.133.100.204 \"rm -rf /tmp/out && tar -xf /tmp/out.tar -C /tmp && mv -v /tmp/out /DOCKER/dev-httpd/site/getcounts-live && ls -R /DOCKER/dev-httpd/site/getcounts-live\""
   },
   "dependencies": {
     "@types/node": "20.6.2",
@@ -18,21 +23,22 @@
     "@types/react-dom": "18.2.7",
     "autoprefixer": "10.4.15",
     "eslint": "8.49.0",
-    "eslint-config-next": "13.5.1",
+    "eslint-config-next": "^14.2.5",
     "i18next": "^23.12.2",
     "i18next-resources-to-backend": "^1.2.1",
-    "next": "13.5.1",
+    "next": "^14.2.5",
     "next-i18n-router": "^5.5.1",
     "next-roots": "^3.10.1",
     "postcss": "8.4.30",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-i18next": "^15.0.0",
     "tailwindcss": "3.3.3",
     "typescript": "5.2.2"
   },
   "devDependencies": {
     "axios": "^1.7.3",
+    "cross-env": "^7.0.3",
     "decompress": "^4.2.1",
     "dotenv": "^16.4.5",
     "esbuild": "^0.23.0",
@@ -41,6 +47,7 @@
     "i18nexus-cli": "^3.5.0",
     "node-watch": "^0.7.4",
     "parse-typed-args": "^0.2.0",
-    "path-to-regexp": "^7.1.0"
+    "path-to-regexp": "^7.1.0",
+    "slugify": "^1.6.6"
   }
 }

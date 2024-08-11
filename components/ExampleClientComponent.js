@@ -5,5 +5,5 @@ import { useTranslation } from 'react-i18next';
 export default function ExampleClientComponent() {
   const { t } = useTranslation();
 
-  return <h3>{t('chamada1')}</h3>;
+  return <div dangerouslySetInnerHTML={{ __html: t('home-info-text-html') }} />
 }

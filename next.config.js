@@ -3,10 +3,12 @@ console.log("É PRODUÇÃO?", isProd)
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    basePath: process.env.BASE_PATH || '',
+
     output: 'export',
    
     // Optional: Change links `/me` -> `/me/` and emit `/me.html` -> `/me/index.html`
-    trailingSlash: false,
+    trailingSlash: true,
    
     // Optional: Prevent automatic `/me` -> `/me/`, instead preserve `href`
     skipTrailingSlashRedirect: true,
@@ -19,5 +21,7 @@ const nextConfig = {
         loaderFile: './img-loader.js',
       },
   }
+
+console.log(nextConfig)
 
 module.exports = nextConfig;
