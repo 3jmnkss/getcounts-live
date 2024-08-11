@@ -2,7 +2,7 @@ import Image from 'next/image';
 import ExampleClientComponent from '@/components/ExampleClientComponent';
 import LanguageChanger from '@/components/LanguageChanger';
 import initTranslations from '../i18nController';
-import {rootsRouter} from '../roots-router'
+import {i18nRouter} from '../roots-router'
 import TranslationsProvider from '@/components/TranslationsProvider';
 
 const i18nNamespaces = ['home'];
@@ -11,7 +11,7 @@ export default async function TermsOfUse({
   params,
   pageHref
 }) {
-  const currentLocale = rootsRouter.getLocaleFromHref(pageHref)
+  const currentLocale = i18nRouter.getLocaleFromHref(pageHref)
   const { t, resources } = await initTranslations(currentLocale, i18nNamespaces);
 
   return (

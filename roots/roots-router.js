@@ -1,5 +1,5 @@
 import { Router, schema } from 'next-roots'
 
-const rootsRouter = new Router(schema)
+const i18nRouter = new Router(schema)
 
-export { rootsRouter }
+export { i18nRouter }

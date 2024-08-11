@@ -8,14 +8,15 @@
     "dev": "npm run prerun && next dev",
     "fastdev": "npm run roots && next dev",
     "build": "cross-env NODE_ENV=production npm run prerun && next build",
-    "builddev": "cross-env BASE_PATH=/getcounts-live npm run build",
+    "builddev": "cross-env NEXT_PUBLIC_BASE_PATH=/getcounts-live npm run build",
     "fastbuild": "npm run roots && next build",
     "start": "next start",
     "lint": "next lint",
     "i18n": "node pullWeblate.js",
-    "roots": "npx next-roots",
-    "roots:watch": "npx next-roots -w",
-    "windeploy": "del out.tar && 7z a -bb3 -ttar out.tar out && ssh elias@31.133.100.204 rm -rf /DOCKER/dev-httpd/site/getcounts-live && scp -v out.tar elias@31.133.100.204:/tmp && ssh elias@31.133.100.204 \"rm -rf /tmp/out && tar -xf /tmp/out.tar -C /tmp && mv -v /tmp/out /DOCKER/dev-httpd/site/getcounts-live && ls -R /DOCKER/dev-httpd/site/getcounts-live\""
+    "fixRoots": "npx replace-in-file --verbose --configFile=fixRoots.json",
+    "roots": "npx next-roots && npm run fixRoots",
+    "roots:watch": "npx next-roots -w && npm run fixRoots",
+    "windeploydev": "npm run builddev && del out.tar && 7z a -bb3 -ttar out.tar out && ssh elias@31.133.100.204 rm -rf /DOCKER/dev-httpd/site/getcounts-live && scp -v out.tar elias@31.133.100.204:/tmp && ssh elias@31.133.100.204 \"rm -rf /tmp/out && tar -xf /tmp/out.tar -C /tmp && mv -v /tmp/out /DOCKER/dev-httpd/site/getcounts-live && ls -R /DOCKER/dev-httpd/site/getcounts-live\""
   },
   "dependencies": {
     "@types/node": "20.6.2",
@@ -48,6 +49,7 @@
     "node-watch": "^0.7.4",
     "parse-typed-args": "^0.2.0",
     "path-to-regexp": "^7.1.0",
+    "replace-in-file": "^8.1.0",
     "slugify": "^1.6.6"
   }
 }

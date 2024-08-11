@@ -1,3 +1,47 @@
-@tailwind base;
+/* @tailwind base;
 @tailwind components;
-@tailwind utilities;
+@tailwind utilities; */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: system-ui, sans-serif;
+    color: black;
+    background-color: whitesmoke;
+    text-align: center;
+}
+
+.number {
+    display: inline-block;
+    transition: transform 0.3s ease-out;
+}
+
+.changed {
+    transform: scale(1.2);
+    color: greenyellow;
+}
+
+.changed-big {
+    transform: scale(1.5);
+    color: red;
+}
+
+main {
+    padding: 1rem;
+}
+
+h1 {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+#main {
+    color: whitesmoke;
+}
+
+#main>* {
+    padding-bottom: 20px;
+}

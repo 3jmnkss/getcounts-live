@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import {rootsRouter} from '@/roots/roots-router'
+import {i18nRouter} from '@/roots/roots-router'
 import i18nConfig from '@/i18nConfig';
 
 export default function LanguageChanger({pageHref, currentLocale}) {
@@ -17,12 +17,12 @@ export default function LanguageChanger({pageHref, currentLocale}) {
     const expires = date.toUTCString();
     document.cookie = `NEXT_LOCALE=${newLocale};expires=${expires};path=/`;
 
-    console.log("indo para", newLocale, rootsRouter, 
-      rootsRouter.getRouteFromHref(pageHref), 
-      rootsRouter.getHref(rootsRouter.getRouteFromHref(pageHref)?.name, { locale: newLocale }),
-      encodeURI(rootsRouter.getHref(rootsRouter.getRouteFromHref(pageHref)?.name, { locale: newLocale }))
+    console.log("indo para", newLocale, i18nRouter, 
+      i18nRouter.getRouteFromHref(pageHref), 
+      i18nRouter.getHref(i18nRouter.getRouteFromHref(pageHref)?.name, { locale: newLocale }),
+      encodeURI(i18nRouter.getHref(i18nRouter.getRouteFromHref(pageHref)?.name, { locale: newLocale }))
     )
-    router.push(rootsRouter.getHref(rootsRouter.getRouteFromHref(pageHref)?.name, { locale: newLocale }));
+    router.push(i18nRouter.getHref(i18nRouter.getRouteFromHref(pageHref)?.name, { locale: newLocale }));
 
     router.refresh();
   };

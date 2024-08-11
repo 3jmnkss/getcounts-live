@@ -1,0 +1,8 @@
+{
+    "files": [
+        "app/**/*.js",
+        "app/**/*.jsx"
+    ],
+    "from": [":any",", ...otherProps","...otherProps, "],
+    "to": ""
+  }

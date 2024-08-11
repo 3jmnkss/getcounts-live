@@ -1,27 +1,27 @@
-const isProd = process.env.NODE_ENV === 'production'
-console.log("É PRODUÇÃO?", isProd)
+// const isProd = process.env.NODE_ENV === 'production'
+// console.log("É PRODUÇÃO?", isProd)
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    basePath: process.env.BASE_PATH || '',
+  basePath: process.env.NEXT_PUBLIC_BASE_PATH || '',
 
-    output: 'export',
-   
-    // Optional: Change links `/me` -> `/me/` and emit `/me.html` -> `/me/index.html`
-    trailingSlash: true,
-   
-    // Optional: Prevent automatic `/me` -> `/me/`, instead preserve `href`
-    skipTrailingSlashRedirect: true,
-   
-    // Optional: Change the output directory `out` -> `dist`
-    // distDir: 'dist',
+  output: 'export',
 
-    images: {
-        loader: 'custom',
-        loaderFile: './img-loader.js',
-      },
-  }
+  // Optional: Change links `/me` -> `/me/` and emit `/me.html` -> `/me/index.html`
+  trailingSlash: true,
 
-console.log(nextConfig)
+  // Optional: Prevent automatic `/me` -> `/me/`, instead preserve `href`
+  skipTrailingSlashRedirect: true,
+
+  // Optional: Change the output directory `out` -> `dist`
+  // distDir: 'dist',
+
+  images: {
+    loader: 'custom',
+    loaderFile: './img-loader.js',
+  },
+}
+
+// console.log(nextConfig)
 
 module.exports = nextConfig;
