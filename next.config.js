@@ -16,10 +16,11 @@ const nextConfig = {
   // Optional: Change the output directory `out` -> `dist`
   // distDir: 'dist',
 
-  images: {
-    loader: 'custom',
-    loaderFile: './img-loader.js',
-  },
+  //TODO Avliar uso de image loader pronto para export
+  // images: {
+  //   loader: 'custom',
+  //   loaderFile: './img-loader.js',
+  // },
 }
 
 // console.log(nextConfig)

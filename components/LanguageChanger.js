@@ -1,12 +1,16 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import {i18nRouter} from '@/roots/roots-router'
+import { i18nRouter } from '@/roots/roots-router'
 import i18nConfig from '@/i18nConfig';
 
-export default function LanguageChanger({pageHref, currentLocale}) {
+export default function LanguageChanger({ pageHref, locale }) {
   const router = useRouter();
-  console.log("DEBUG",pageHref, currentLocale)
+
+  if (process.env.NODE_ENV !== 'production') {
+    console.log("DEBUG", pageHref, locale)
+  }
+
   const handleChange = e => {
     const newLocale = e.target.value;
 
@@ -17,8 +21,13 @@ export default function LanguageChanger({pageHref, currentLocale}) {
     const expires = date.toUTCString();
     document.cookie = `NEXT_LOCALE=${newLocale};expires=${expires};path=/`;
 
-    console.log("indo para", newLocale, i18nRouter, 
-      i18nRouter.getRouteFromHref(pageHref), 
+    i18nRouter.schema.routes.en.forEach(r => {
+      console.log("ROTA en", r)
+      console.log("ROTA pt", i18nRouter.schema.routes.pt.find(ri=>ri.name === r.name))
+      console.log("ROTA hi", i18nRouter.schema.routes.hi.find(ri=>ri.name === r.name))
+    })
+    console.log("indo para", newLocale,
+      i18nRouter.getRouteFromHref(pageHref),
       i18nRouter.getHref(i18nRouter.getRouteFromHref(pageHref)?.name, { locale: newLocale }),
       encodeURI(i18nRouter.getHref(i18nRouter.getRouteFromHref(pageHref)?.name, { locale: newLocale }))
     )
@@ -28,8 +37,8 @@ export default function LanguageChanger({pageHref, currentLocale}) {
   };
 
   return (
-    <select onChange={handleChange} value={currentLocale}>
-      {i18nConfig?.locales?.map(l=><option key={l} value={l}>{l}</option>)}
+    <select onChange={handleChange} value={locale}>
+      {i18nConfig?.locales?.map(l => <option key={l} value={l}>{l}</option>)}
     </select>
   );
 }

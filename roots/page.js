@@ -1,14 +1,17 @@
+import Link from 'next/link';
 import Image from 'next/image';
-import { i18nRouter } from './roots-router'
+import { i18nRouter } from './roots-router';
 import initTranslations from './i18nController';
-import TranslationsProvider from '@/components/TranslationsProvider';
+import ytLogo from '../assets/youtube.svg';
+import HomeHeader from '../components/HomeHeader';
+import Footer from '../components/Footer';
 
 const isProd = process.env.NODE_ENV === 'production'
-const i18nNamespaces = ['home', 'header', 'footer'];
 
 export default async function Home({ pageHref }) {
-  const pageLocale = i18nRouter.getLocaleFromHref(pageHref)
-  const { t, resources } = await initTranslations(pageLocale, i18nNamespaces);
+  const i18nNamespaces = ['home', 'header', 'routes'];
+  const locale = i18nRouter.getLocaleFromHref(pageHref)
+  const { t, isBaseLng } = await initTranslations(locale, i18nNamespaces);
 
   // if (process.env.NODE_ENV !== 'production'){
   //   console.log("Props da page base:", pageHref)
@@ -16,24 +19,7 @@ export default async function Home({ pageHref }) {
   // }
 
   return <>
-    <header>
-      <a href="/" style={{ textDecoration: "none" }}>
-        <h1
-          style={{
-            marginTop: 20,
-            fontWeight: "bold",
-            fontSize: "xx-large",
-            marginBottom: 0
-          }}
-        >
-          📊GetCounts.Live!
-        </h1>
-      </a>
-      <h2 style={{ margin: 0, fontSize: "11pt" }}>{t('home-subtitle', { ns: 'header' })}</h2>
-      <p style={{ marginBottom: 20, fontStyle: "italic", marginTop: 0 }}>
-        {t('realtime-call', { ns: 'header' })}{!isProd ? ` {${pageLocale}}` : ''}
-      </p>
-    </header>
+    <HomeHeader {...{ locale }} />
     <main>
       <div id="counters" style={{ display: "flex", flexDirection: "column" }}>
         <div
@@ -46,19 +32,19 @@ export default async function Home({ pageHref }) {
           }}
         >
           <div style={{ display: "flex", padding: "0px 7px" }}>
-            <img
-              src="/assets/youtube.svg"
+            <Image
+              src={ytLogo}
+              width={32}
               alt="Youtube Logo"
-              style={{ width: 32, marginTop: 1 }}
             />
-            <a
+            <Link
               style={{ textDecoration: "none", color: "white", marginLeft: 5 }}
-              href="youtube/views/"
+              href={i18nRouter.getHref('/youtube/views', { locale })}
             >
-              <h2 style={{ margin: 0, fontWeight: "lighter", fontSize: "initial" }}>
-                Youtube Live View Counter
+              <h2 style={{ margin: 0, fontWeight: "lighter", fontSize: "initial", ...(isBaseLng?{}:{ textTransform: 'capitalize' })}}>
+                {t('yt-view-counter', { ns: 'routes' })}
               </h2>
-            </a>
+            </Link>
           </div>
         </div>
       </div>
@@ -80,18 +66,6 @@ export default async function Home({ pageHref }) {
         <div dangerouslySetInnerHTML={{ __html: t('home-info-text-html') }} />
       </div>
     </main>
-    <footer
-      style={{
-        fontSize: "0.75rem",
-        lineHeight: "1rem",
-        padding: "0px 50px",
-        paddingBottom: 10
-      }}
-    >
-      <a href="privacy-policy.html">Privacy Policy</a> |
-      <a href="terms-of-use.html">Terms Of Use</a> <br />
-      {t('msg-no-data-collected', { ns: 'footer' })}
-      <p>© 2024 GetCounts.Live! {t('copyright', { ns: 'footer' })}</p>
-    </footer>
+    <Footer {...{ locale, pageHref }}/>
   </>
 }

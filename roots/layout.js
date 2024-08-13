@@ -1,28 +1,19 @@
 import './globals.css';
+import Link from 'next/link';
 import { Inter } from 'next/font/google';
-import nextConfig from '../next.config'
+import { i18nRouter } from './roots-router';
 import initTranslations from './i18nController';
 
 const inter = Inter({ subsets: ['latin'] });
+const i18nNamespaces = ['home', 'header', 'footer', 'routes'];
 
+/** @type {import("next").Metadata} */
 export async function generateMetadata({ locale }) {
-  const i18nNamespaces = ['home'];
   const { t } = await initTranslations(locale, i18nNamespaces);
 
   return {
     title: t('home-title'),
     description: t('home-description'),
-    icons: {
-      icon: [
-        { url: nextConfig.basePath + '/favicon.ico' },
-        { url: nextConfig.basePath + '/favicon-32x32.png', sizes: "32x32", type: 'image/png' },
-        { url: nextConfig.basePath + '/favicon-16x16.png', sizes: "16x16", type: 'image/png' }
-      ],
-      // shortcut: '/shortcut-icon.png',
-      apple: [
-        { url: nextConfig.basePath + '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }
-      ],
-    },
   }
 
   //TODO Configurar meta tags sociais
@@ -73,11 +64,14 @@ export async function generateMetadata({ locale }) {
     </script>
 */
 
-export default function Layout({ children, params, locale }) {
+export default async function Layout({ children, params, locale }) {
+  const { t, isBaseLng } = await initTranslations(locale, i18nNamespaces);
   process.env.NODE_ENV !== 'production' && console.log("Props do layout base:", params, locale)
   return (
     <html lang={locale}>
-      <body /*className={inter.className}*/>{children}</body>
+      <body /*className={inter.className}*/>
+        {children}
+      </body>
     </html>
   );
 }

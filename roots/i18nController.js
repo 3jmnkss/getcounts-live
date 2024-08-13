@@ -34,27 +34,28 @@ export default async function initTranslations(
     preload: resources ? [] : i18nConfig.locales
   });
 
-  // console.log(process.env.NEXT_PUBLIC_WEBLATE_PROJECT_SLUG,resources)
+  console.log(namespaces)
+  const isBaseLng = i18nConfig.ownLocales && i18nConfig.ownLocales.includes(i18nInstance.language)
   return {
+    isBaseLng,
     i18n: i18nInstance,
     resources: i18nInstance.services.resourceStore.data,
-    t: (key,options={}) => {
-      if (i18nConfig.ownLocales && i18nConfig.ownLocales.includes(i18nInstance.language))
-        return i18nInstance.t(key,options)
-      return i18nInstance.t([key + '-i18n', key],options)
-    }
-  };
-}
+    t: (key, options = {}) => isBaseLng ? i18nInstance.t(key, options) : i18nInstance.t([key + '-i18n', key], options)
+  }
+};
 
-export async function getRouteI18N(routeSlug) {
+
+export async function getI18NRoutes(route) {
   let routePerLocale = []
   for (const locale of i18nConfig.locales) {
     let erroSlug = '';
     const i18nRoutes = await import(`../locales/${process.env.NEXT_PUBLIC_WEBLATE_PROJECT_SLUG}/routes/${locale}.json`)
-    const i18nRoute = i18nRoutes[routeSlug];
+    let i18nRoute = i18nRoutes[route + '-i18n'];
+    if (!i18nRoute || (i18nConfig.ownLocales && i18nConfig.ownLocales.includes(locale)))
+      i18nRoute = i18nRoutes[route];
     if (!i18nRoute) {
       erroSlug = `:erro\\/\/:erro\\/\/:erro`
-      console.error(`Slug i18n [${locale}] da rota '${routeSlug}' não encontrado.`)
+      console.error(`Slug i18n [${locale}] da rota '${route}' não encontrado.`)
     }
     let path = slugify(i18nRoute, { locale, lower: true }) || i18nRoute.replace(/\s+/g, '-');
     path = erroSlug || (process.env.NODE_ENV !== 'production') ? encodeURI(path) : path;
