@@ -1,5 +1,5 @@
 'use client'
-import { extractVideoId, getVideo, populaViewsVideo, puxarDetalhesVideo } from '../utils/youtube'
+import { extractChannelId, populaInscritosCanal, puxarDetalhesCanal } from '../utils/youtube'
 import { useEffect, useState, useRef } from 'react';
 
 export default function YTViewCounter({ t_map }) {
@@ -22,10 +22,11 @@ export default function YTViewCounter({ t_map }) {
         setPlusMarginTopTitle(window.scrollY ? 40 : 0)
     }
 
-    async function getYoutubeVideoViews(videoId) {
-        videoId = extractVideoId(videoId);
-        const detalhesVideo = await puxarDetalhesVideo(videoId);
-        populaViewsVideo(detalhesVideo)
+    async function getYoutubeChannelSubscribers(channelId) {
+        const [ extractedChannelId, forHandle ] = await extractChannelId(channelId);
+        console.log(extractedChannelId, forHandle)
+        const detalhesCanal = await puxarDetalhesCanal(extractedChannelId, forHandle);
+        populaInscritosCanal(detalhesCanal)
     }
 
     useEffect(() => {
@@ -38,9 +39,10 @@ export default function YTViewCounter({ t_map }) {
         if (videoId) {
             clearInterval(intervalRef.current);
             setShowAlert(false); setShowPanel(false);
-            getYoutubeVideoViews(videoId)
+            getYoutubeChannelSubscribers(videoId)
                 .then(() => {
-                    intervalRef.current = setInterval(getYoutubeVideoViews, 10000, videoId);
+                    const interval = setInterval(getYoutubeChannelSubscribers, 10000, videoId);
+                    intervalRef.current = interval;
                     setShowPanel(true); setShowAlert(false);
                 })
                 .catch(error => {
@@ -64,7 +66,7 @@ export default function YTViewCounter({ t_map }) {
                     size={40}
                     type="search"
                     id="video-id"
-                    placeholder={t('yt-search-video-placeholder')}
+                    placeholder={t('yt-search-channel-placeholder')}
                     style={{ height: "100%", width: "80%" }}
                 />
                 <input
@@ -94,7 +96,7 @@ export default function YTViewCounter({ t_map }) {
                 borderRadius: 20
             }}
         >
-            ⚠️ {t('video-not-found')}
+            ⚠️ {t('channel-not-found')}
         </div>
         <div
             id="main"
@@ -122,13 +124,13 @@ export default function YTViewCounter({ t_map }) {
                         padding: "0px 25px", marginTop: 40+plusMarginTopTitle
                     }}
                 />
-                <div id="view-counter" style={{
+                <div id="subscriber-counter" style={{
                     flexGrow: 1, display: 'flex', paddingBottom: 50,
                     flexDirection: 'column', justifyContent: 'center'
                 }}>
                     <div id="contador" />
                     <div id="timestamp">
-                        {t('views-at')} |
+                        {t('subscribers-at')} |
                         <span id="clock" style={{ marginLeft: 5 }}>
                             <span id="hours" className="number">
                                 00

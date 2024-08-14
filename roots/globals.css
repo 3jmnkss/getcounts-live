@@ -20,7 +20,7 @@ body {
 }
 
 .changed {
-    transform: scale(1.2);
+    transform: scale(10.0);
     color: greenyellow;
 }
 

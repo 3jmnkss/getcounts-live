@@ -4,7 +4,7 @@ import ytLogo from '../assets/youtube.svg';
 
 const isProd = process.env.NODE_ENV === 'production'
 
-export default async function YTHeader({ locale, t, i18nRouter, isBaseLng }) {
+export default async function YTHeader({ locale, t, i18nRouter, isBaseLng, title }) {
     return <header>
         <span>
             <h1
@@ -19,13 +19,14 @@ export default async function YTHeader({ locale, t, i18nRouter, isBaseLng }) {
                     ...(isBaseLng ? {} : { textTransform: 'capitalize' })
                 }}
             >
-                <Image //TODO adicionar priotidade
+                <Image
+                    priority
                     src={ytLogo}
                     width={32}
                     alt="Youtube Logo"
                     style={{marginRight: 5, marginBottom: 3, verticalAlign: 'bottom'}}
                 />
-                {t('yt-view-counter', { ns: 'routes' })}
+                {title}
             </h1>
         </span>
         <Link href={i18nRouter.getHref('/', { locale })} style={{textDecoration: 'none'}}>
