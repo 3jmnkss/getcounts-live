@@ -35,7 +35,7 @@ yarn-error.log*
 next-env.d.ts
 
 #next-roots
-/app
+/app/(routes)
 .env*
 site/
 locales/

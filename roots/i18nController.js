@@ -34,7 +34,6 @@ export default async function initTranslations(
     preload: resources ? [] : i18nConfig.locales
   });
 
-  console.log(namespaces)
   const isBaseLng = i18nConfig.ownLocales && i18nConfig.ownLocales.includes(i18nInstance.language)
   return {
     isBaseLng,

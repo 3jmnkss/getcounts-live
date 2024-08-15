@@ -4,10 +4,12 @@ import { useRouter } from 'next/navigation';
 import { i18nRouter } from '@/roots/roots-router'
 import i18nConfig from '@/i18nConfig';
 
+const isProd = process.env.NODE_ENV === 'production'
+
 export default function LanguageChanger({ pageHref, locale }) {
   const router = useRouter();
 
-  if (process.env.NODE_ENV !== 'production') {
+  if (!isProd) {
     console.log("DEBUG", pageHref, locale)
   }
 
@@ -21,18 +23,24 @@ export default function LanguageChanger({ pageHref, locale }) {
     const expires = date.toUTCString();
     document.cookie = `NEXT_LOCALE=${newLocale};expires=${expires};path=/`;
 
-    i18nRouter.schema.routes.en.forEach(r => {
-      console.log("ROTA en", r)
-      console.log("ROTA pt", i18nRouter.schema.routes.pt.find(ri=>ri.name === r.name))
-      console.log("ROTA hi", i18nRouter.schema.routes.hi.find(ri=>ri.name === r.name))
-    })
-    console.log("indo para", newLocale,
-      i18nRouter.getRouteFromHref(pageHref),
-      i18nRouter.getHref(i18nRouter.getRouteFromHref(pageHref)?.name, { locale: newLocale }),
-      encodeURI(i18nRouter.getHref(i18nRouter.getRouteFromHref(pageHref)?.name, { locale: newLocale }))
-    )
-    router.push(i18nRouter.getHref(i18nRouter.getRouteFromHref(pageHref)?.name, { locale: newLocale }));
+    if (!isProd) {
+      i18nRouter.schema.routes.en.forEach(r => {
+        console.log("ROTA en", r)
+        console.log("ROTA pt", i18nRouter.schema.routes.pt.find(ri => ri.name === r.name))
+        console.log("ROTA hi", i18nRouter.schema.routes.hi.find(ri => ri.name === r.name))
+      })
+      console.log("indo para", newLocale,
+        i18nRouter.getRouteFromHref(pageHref),
+        i18nRouter.getHref(i18nRouter.getRouteFromHref(pageHref)?.name, { locale: newLocale }),
+        encodeURI(i18nRouter.getHref(i18nRouter.getRouteFromHref(pageHref)?.name, { locale: newLocale }))
+      )
+    }
 
+    router.push(
+      i18nRouter.getHref(
+        i18nRouter.getRouteFromHref(pageHref)?.name, { locale: newLocale }
+      )
+    );
     router.refresh();
   };
 

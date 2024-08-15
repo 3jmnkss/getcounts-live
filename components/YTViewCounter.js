@@ -1,6 +1,8 @@
 'use client'
-import { extractVideoId, getVideo, populaViewsVideo, puxarDetalhesVideo } from '../utils/youtube'
+import { extractVideoId, populaViewsVideo, puxarDetalhesVideo } from '../utils/youtube'
 import { useEffect, useState, useRef } from 'react';
+
+
 
 export default function YTViewCounter({ t_map }) {
     const t = (key) => t_map[key];
@@ -52,7 +54,7 @@ export default function YTViewCounter({ t_map }) {
 
     useEffect(() => {
         handleResize()
-        setVideoId('VI4JjLiqNl4')
+        process.env.NEXT_PUBLIC_DEV_BUILD && setVideoId('VI4JjLiqNl4')
     }, [])
 
 

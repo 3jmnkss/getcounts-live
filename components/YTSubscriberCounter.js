@@ -54,7 +54,7 @@ export default function YTViewCounter({ t_map }) {
 
     useEffect(() => {
         handleResize()
-        setVideoId('VI4JjLiqNl4')
+        process.env.NEXT_PUBLIC_DEV_BUILD && setVideoId('VI4JjLiqNl4')
     }, [])
 
 

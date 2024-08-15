@@ -17,7 +17,7 @@
     "bsync": "npx browser-sync start --proxy \"http://localhost:3000/\" --files \"./\"",
     "roots": "npx next-roots && npm run fixRoots",
     "roots:watch": "npx next-roots -w && npm run fixRoots",
-    "windeploydev": "npm run builddev && del out.tar && 7z a -bb3 -ttar out.tar out && ssh elias@31.133.100.204 rm -rf /DOCKER/dev-httpd/site/getcounts-live && scp -v out.tar elias@31.133.100.204:/tmp && ssh elias@31.133.100.204 \"rm -rf /tmp/out && tar -xf /tmp/out.tar -C /tmp && mv -v /tmp/out /DOCKER/dev-httpd/site/getcounts-live && ls -R /DOCKER/dev-httpd/site/getcounts-live\""
+    "windeploydev": "cross-env NEXT_PUBLIC_DEV_BUILD=true npm run builddev && del out.tar && 7z a -bb3 -ttar out.tar out && ssh elias@31.133.100.204 rm -rf /DOCKER/dev-httpd/site/getcounts-live && scp -v out.tar elias@31.133.100.204:/tmp && ssh elias@31.133.100.204 \"rm -rf /tmp/out && tar -xf /tmp/out.tar -C /tmp && mv -v /tmp/out /DOCKER/dev-httpd/site/getcounts-live && ls -R /DOCKER/dev-httpd/site/getcounts-live\""
   },
   "dependencies": {
     "@types/node": "20.6.2",

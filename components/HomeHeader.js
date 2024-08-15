@@ -1,5 +1,6 @@
 import Link from "next/link"
 import initTranslations from "@/roots/i18nController";
+import { i18nRouter } from '@/roots/roots-router'
 
 const isProd = process.env.NODE_ENV === 'production'
 const i18nNamespaces = ['header'];
@@ -8,7 +9,7 @@ export default async function HomeHeader({ locale, simple }) {
     const { t } = await initTranslations(locale, i18nNamespaces);
 
     return <header>
-        <Link href="/" style={{ textDecoration: "none" }}>
+        <Link href={i18nRouter.getHref("/", {locale})} style={{ textDecoration: "none" }}>
             <h1
                 style={{
                     marginTop: 20,
