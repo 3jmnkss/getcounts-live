@@ -19,21 +19,24 @@ export default async function Footer({ locale, pageHref, addMsg }) {
     >
         <hr style={{ marginBottom: 15 }} />
         <Link
+            prefetch={false}
+            //TODO padronizar capitalize entre usos de CSS e JS
             style={{ ...(isBaseLng ? {} : { textTransform: 'capitalize' }) }}
-            href={i18nRouter.getHref('/privacy-policy', { locale })}
+            href={i18nRouter.getHref('/privacy-policy', { locale }) + '/'}
         >
             {t('privacy-policy', { ns: 'routes' })}
         </Link>
         {' | '}
         <Link
+            prefetch={false}
             style={{ ...(isBaseLng ? {} : { textTransform: 'capitalize' }) }}
-            href={i18nRouter.getHref('/terms-of-use', { locale })}
+            href={i18nRouter.getHref('/terms-of-use', { locale }) + '/'}
         >
             {t('terms-of-use', { ns: 'routes' })}
         </Link>
         <br />
         {t('msg-no-data-collected')}
-        {addMsg ? <div><br/>{addMsg}</div> : ''}
+        {addMsg ? <div><br />{addMsg}</div> : ''}
         <div style={{ display: "block ruby" }}>
             <p>© 2024 GetCounts.Live! {t('copyright')}</p>
             <span style={{ marginLeft: 10 }}>

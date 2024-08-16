@@ -1,11 +1,14 @@
 import './globals.css';
-import Link from 'next/link';
 import { Inter } from 'next/font/google';
-import { i18nRouter } from './roots-router';
 import initTranslations from './i18nController';
+import { GoogleAnalytics } from '@next/third-parties/google'
 
 const inter = Inter({ subsets: ['latin'] });
 const i18nNamespaces = ['home', 'header', 'footer', 'routes'];
+const isProd = process.env.NODE_ENV === 'production'
+const isDevBuild = process.env.NEXT_PUBLIC_DEV_BUILD === 'true'
+
+console.log("\nAtivando Analytics:", isProd && !isDevBuild)
 
 /** @type {import("next").Metadata} */
 export async function generateMetadata({ locale }) {
@@ -44,26 +47,8 @@ export async function generateMetadata({ locale }) {
 */
 };
 
-//TODO Adicionar suporte ao gtag
-/*
-<script>
-      let url = window.location.toString();
-      if (!url.includes('stackblitz') && !url.includes('webcontainer')) {
-        console.log('NOT DEV');
-        window.dataLayer = window.dataLayer || [];
-        function gtag() {
-          dataLayer.push(arguments);
-        }
-        gtag('js', new Date());
 
-        gtag('config', 'G-D3EGFTWKZX');
-      } else {
-        console.log('stackblitz');
-      }
-      console.log(window);
-    </script>
-*/
-
+//TODO IMPLEMENTAR PAGINA 404 ADEQAUADA
 export default async function Layout({ children, params, locale }) {
   const { t, isBaseLng } = await initTranslations(locale, i18nNamespaces);
   process.env.NODE_ENV !== 'production' && console.log("Props do layout base:", params, locale)
@@ -72,6 +57,7 @@ export default async function Layout({ children, params, locale }) {
       <body /*className={inter.className}*/>
         {children}
       </body>
+      {isProd && !isDevBuild && <GoogleAnalytics gaId="G-D3EGFTWKZX" />}
     </html>
   );
 }

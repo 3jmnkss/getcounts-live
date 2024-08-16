@@ -2,6 +2,9 @@
 import { extractChannelId, populaInscritosCanal, puxarDetalhesCanal } from '../utils/youtube'
 import { useEffect, useState, useRef } from 'react';
 
+const isProd = process.env.NODE_ENV === 'production'
+const isDevBuild = process.env.NEXT_PUBLIC_DEV_BUILD === 'true'
+
 export default function YTViewCounter({ t_map }) {
     const t = (key) => t_map[key];
 
@@ -23,8 +26,7 @@ export default function YTViewCounter({ t_map }) {
     }
 
     async function getYoutubeChannelSubscribers(channelId) {
-        const [ extractedChannelId, forHandle ] = await extractChannelId(channelId);
-        console.log(extractedChannelId, forHandle)
+        const [extractedChannelId, forHandle] = await extractChannelId(channelId);
         const detalhesCanal = await puxarDetalhesCanal(extractedChannelId, forHandle);
         populaInscritosCanal(detalhesCanal)
     }
@@ -35,7 +37,7 @@ export default function YTViewCounter({ t_map }) {
     })
 
     useEffect(() => {
-        console.log("MUDOU VIDEO ID", videoId)
+        (!isProd || isDevBuild) && console.log("MUDOU VIDEO ID", videoId)
         if (videoId) {
             clearInterval(intervalRef.current);
             setShowAlert(false); setShowPanel(false);
@@ -53,8 +55,13 @@ export default function YTViewCounter({ t_map }) {
     }, [videoId])
 
     useEffect(() => {
-        handleResize()
-        process.env.NEXT_PUBLIC_DEV_BUILD && setVideoId('VI4JjLiqNl4')
+        handleResize();
+        (!isProd || isDevBuild) && setVideoId('VI4JjLiqNl4')
+
+        return () => {
+            (!isProd || isDevBuild) && console.log("DESMONTANDO SubscriberCounter....")
+            clearInterval(intervalRef.current);
+        }
     }, [])
 
 
@@ -121,7 +128,7 @@ export default function YTViewCounter({ t_map }) {
                     id="titulo"
                     style={{
                         margin: "auto", opacity: "0.8",
-                        padding: "0px 25px", marginTop: 40+plusMarginTopTitle
+                        padding: "0px 25px", marginTop: 40 + plusMarginTopTitle
                     }}
                 />
                 <div id="subscriber-counter" style={{

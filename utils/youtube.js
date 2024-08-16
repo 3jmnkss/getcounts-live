@@ -12,7 +12,6 @@ export function extractVideoId(videoId) {
     // Expressão regular para cobrir ambas as versões de URLs
     const regex = /^.*(youtu.be\/|v\/|u\/\w\/embed\/|embed\/|watch\?v=)([^#&?]*).*/;
     const match = videoId.match(regex);
-    console.log("testando vide", videoId)
 
     if (match && match[2])
         return match[2];
@@ -93,7 +92,7 @@ export function populaViewsVideo(data) {
 
 export async function puxarDetalhesCanal(channelId, forHandle) {
     if (!channelId) throw Error('channelId is null or undefined.');
-    console.log("FOR AHNDLE", forHandle)
+
     const apiUrl = 'https://www.googleapis.com/youtube/v3/channels?' +
         `${forHandle ? `forHandle=${channelId}&` : `id=${channelId}&`}` +
         `key=${apiKey}&` +

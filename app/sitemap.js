@@ -16,13 +16,14 @@ const preConfig = {
         priority: 0.5,
     }
 }
-
+//TODO adicionar teste de googlebot se está retornando 200 para cada rota com conteúdo
+//TODO adicionar pipeline de verificaçao do site completo como se fosse googlebot crwaler em busaca de 301 e 404
 export default async function sitemap() {
     const { schema } = i18nRouter;
     console.log("\nGerando sitemap.xml para a url:", baseUrl, "...")
     console.log(`Locale padrão: [${schema.defaultLocale}]...`)
     const sitemap = schema.routes[schema.defaultLocale].map(route => {
-        const defaultUrl = baseUrl + route.href;
+        const defaultUrl = baseUrl + route.href + (route.href === '/' ? '' : '/');
         return {
             url: defaultUrl,
             priority: 0.8,
@@ -37,7 +38,7 @@ export default async function sitemap() {
                             .filter(i18nRoute => i18nRoute.name === route.name)
                             .forEach((i18nRoute, i) => {
                                 if (i) return;
-                                languages[locale] = baseUrl + i18nRoute.href;
+                                languages[locale] = baseUrl + i18nRoute.href + (i18nRoute.href === '/' ? '' : '/');
                             })
                     );
                     return languages;

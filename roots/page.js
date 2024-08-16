@@ -5,9 +5,6 @@ import initTranslations from './i18nController';
 import ytLogo from '../assets/youtube.svg';
 import HomeHeader from '../components/HomeHeader';
 import Footer from '../components/Footer';
-import { wrap } from 'module';
-
-const isProd = process.env.NODE_ENV === 'production'
 
 export default async function Home({ pageHref }) {
   const i18nNamespaces = ['home', 'header', 'routes'];
@@ -21,7 +18,7 @@ export default async function Home({ pageHref }) {
 
   return <>
     <HomeHeader {...{ locale }} />
-    <main style={{marginTop: 25}}>
+    <main style={{ marginTop: 25 }}>
       <div
         id="counters"
         style={{
@@ -52,8 +49,9 @@ export default async function Home({ pageHref }) {
               alt="Youtube Logo"
             />
             <Link
+              prefetch={false}
               style={{ textDecoration: "none", color: "white", marginLeft: 5 }}
-              href={i18nRouter.getHref('/youtube/views-counter', { locale })}
+              href={i18nRouter.getHref('/youtube/views-counter', { locale }) + '/'}
             >
               <h2 style={{
                 margin: 0, fontWeight: "lighter",
@@ -82,8 +80,9 @@ export default async function Home({ pageHref }) {
               alt="Youtube Logo"
             />
             <Link
+              prefetch={false}
               style={{ textDecoration: "none", color: "white", marginLeft: 5 }}
-              href={i18nRouter.getHref('/youtube/subscribers-counter', { locale })}
+              href={i18nRouter.getHref('/youtube/subscribers-counter', { locale }) + '/'}
             >
               <h2 style={{
                 margin: 0, fontWeight: "lighter",

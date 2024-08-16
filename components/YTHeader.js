@@ -24,12 +24,20 @@ export default async function YTHeader({ locale, t, i18nRouter, isBaseLng, title
                     src={ytLogo}
                     width={32}
                     alt="Youtube Logo"
-                    style={{marginRight: 5, marginBottom: 3, verticalAlign: 'bottom'}}
+                    style={{ marginRight: 5, marginBottom: 3, verticalAlign: 'bottom' }}
                 />
                 {title}
             </h1>
         </span>
-        <Link href={i18nRouter.getHref('/', { locale })} style={{textDecoration: 'none'}}>
+        <Link
+            prefetch={false}
+            style={{ textDecoration: 'none' }}
+            href={(() => {
+                let href = i18nRouter.getHref("/", { locale });
+                if (href === '/')
+                    return href;
+                return href + '/';
+            })()}>
             <p style={{ margin: 0, fontSize: "11pt", fontWeight: 300 }}>
                 {t('home-call', { ns: 'header' })}
             </p>

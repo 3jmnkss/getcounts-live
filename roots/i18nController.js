@@ -58,6 +58,7 @@ export async function getI18NRoutes(route) {
     }
     let path = slugify(i18nRoute, { locale, lower: true }) || i18nRoute.replace(/\s+/g, '-');
     path = erroSlug || (process.env.NODE_ENV !== 'production') ? encodeURI(path) : path;
+    //TODO testar se pode avaliar trailingslash do nextcoinfgi para simplificar geraçao de links
     routePerLocale.push({ locale, path })
   }
   return routePerLocale;

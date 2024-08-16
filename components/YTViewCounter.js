@@ -2,7 +2,8 @@
 import { extractVideoId, populaViewsVideo, puxarDetalhesVideo } from '../utils/youtube'
 import { useEffect, useState, useRef } from 'react';
 
-
+const isProd = process.env.NODE_ENV === 'production'
+const isDevBuild = process.env.NEXT_PUBLIC_DEV_BUILD === 'true'
 
 export default function YTViewCounter({ t_map }) {
     const t = (key) => t_map[key];
@@ -16,6 +17,7 @@ export default function YTViewCounter({ t_map }) {
     const [plusMarginTopTitle, setPlusMarginTopTitle] = useState(0)
 
     function handleResize() {
+        //TODO resolve rproblema de resize quando chama devtools em baixo e quando abre no monitor de 27 com dpi aalto
         setPanelHeight(
             Math.max(325,
                 window.scrollY ?
@@ -36,7 +38,7 @@ export default function YTViewCounter({ t_map }) {
     })
 
     useEffect(() => {
-        console.log("MUDOU VIDEO ID", videoId)
+        (!isProd || isDevBuild) && console.log("MUDOU VIDEO ID", videoId)
         if (videoId) {
             clearInterval(intervalRef.current);
             setShowAlert(false); setShowPanel(false);
@@ -53,8 +55,13 @@ export default function YTViewCounter({ t_map }) {
     }, [videoId])
 
     useEffect(() => {
-        handleResize()
-        process.env.NEXT_PUBLIC_DEV_BUILD && setVideoId('VI4JjLiqNl4')
+        handleResize();
+        (!isProd || isDevBuild) && setVideoId('VI4JjLiqNl4')
+
+        return () => {
+            (!isProd || isDevBuild) && console.log("DESMONTANDO ViewCounter....")
+            clearInterval(intervalRef.current);
+        }
     }, [])
 
 

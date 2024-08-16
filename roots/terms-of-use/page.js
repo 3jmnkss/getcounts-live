@@ -2,16 +2,17 @@ import Footer from '@/components/Footer';
 import { i18nRouter } from '../roots-router'
 import HomeHeader from '@/components/HomeHeader';
 import initTranslations from '../i18nController';
+import { capitalizeIfI18N } from '../../utils/string'
 
 const i18nNamespaces = ['terms-of-use', 'footer', 'routes'];
 
 /** @type {import("next").Metadata} */
 export async function generateMetadata({ pageHref }) {
   const locale = i18nRouter.getLocaleFromHref(pageHref)
-  const { t } = await initTranslations(locale, i18nNamespaces);
+  const { t, isBaseLng } = await initTranslations(locale, i18nNamespaces);
 
   return {
-    title: t('terms-of-use', { ns: 'routes' }),
+    title: capitalizeIfI18N(t('terms-of-use', { ns: 'routes' }), isBaseLng),
     description: t('terms-of-use', { ns: 'routes' }) + ' - GetCounts.Live!',
   }
 }

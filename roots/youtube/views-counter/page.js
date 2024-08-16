@@ -14,7 +14,7 @@ export async function generateMetadata({ pageHref }) {
   const locale = i18nRouter.getLocaleFromHref(pageHref)
   const { t } = await initTranslations(locale, i18nNamespaces);
 
-  /* TODO adicionar metadados do youtube live view counter para redes sociais
+  /*
   <!-- Tags Open Graph para redes sociais (opcional) -->
     <meta
       property="og:title"
@@ -40,7 +40,7 @@ export async function generateMetadata({ pageHref }) {
       name="twitter:description"
       content="Get live view counts (counter in real time) of a Youtube video, playlist or channel! Check it now on GetCounts.Live."
     />
-    TODO parece que esse o next automatiza
+   
     <meta
       name="twitter:image"
       content="https://getcounts.live/android-chrome-512x512.png"
@@ -49,6 +49,7 @@ export async function generateMetadata({ pageHref }) {
   */
 
   return {
+    //TODO capitalizar titulos
     title: t('yt-view-counter-title') + ' - GetCounts.Live!',
     description: t('yt-view-counter-description'),
   }

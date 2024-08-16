@@ -8,8 +8,18 @@ const i18nNamespaces = ['header'];
 export default async function HomeHeader({ locale, simple }) {
     const { t } = await initTranslations(locale, i18nNamespaces);
 
+    
+    //TODO criar encapsulador de Link com prefecth false
     return <header>
-        <Link href={i18nRouter.getHref("/", {locale})} style={{ textDecoration: "none" }}>
+        <Link
+            prefetch={false}
+            style={{ textDecoration: "none" }}
+            href={(() => { //TODO criar funçao que retorna links do i18nRouter com prefixos
+                let href = i18nRouter.getHref("/", { locale });
+                if (href === '/')
+                    return href;
+                return href + '/';
+            })()}>
             <h1
                 style={{
                     marginTop: 20,
