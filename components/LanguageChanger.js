@@ -37,6 +37,7 @@ export default function LanguageChanger({ pageHref, locale }) {
       )
     }
 
+   //TODO VRF pois pede RSC dá 404. Parece que tem a ver com o cache de rotas
     router.push(
       i18nRouter.getHref(
         i18nRouter.getRouteFromHref(pageHref)?.name, { locale: newLocale }
