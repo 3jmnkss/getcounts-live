@@ -5,6 +5,57 @@ import initTranslations from './i18nController';
 import ytLogo from '../assets/youtube.svg';
 import HomeHeader from '../components/HomeHeader';
 import Footer from '../components/Footer';
+import { getPagemap } from '../app/sitemap'
+
+const i18nNamespaces = ['home', 'header', 'footer', 'routes'];
+const isProd = process.env.NODE_ENV === 'production'
+const isDevBuild = process.env.NEXT_PUBLIC_DEV_BUILD === 'true'
+
+/** @type {import("next").Metadata} */
+export async function generateMetadata({ pageHref }) {
+  const locale = i18nRouter.getLocaleFromHref(pageHref)
+  const { t } = await initTranslations(locale, i18nNamespaces);
+
+  (!isProd || isDevBuild) && console.log("PAGEMAP", getPagemap(pageHref))
+
+  return {
+    title: t('home-title'),
+    description: t('home-description'),
+    ...(!getPagemap(pageHref) ? {} : {
+      alternates: {
+        canonical: getPagemap(pageHref).url,
+        languages: getPagemap(pageHref).alternates.languages
+      }
+    }),
+  }
+
+  //TODO Configurar meta tags sociais
+  /*
+  <!-- Tags Open Graph para redes sociais (opcional) -->
+    <meta property="og:title" content="Live Real-Time Counts" />
+    <meta
+      property="og:description"
+      content="Real time live counts of Views, Likes, Subscribers and Followers from several platforms: Youtube and more! Check it now at GetCounts.Live!"
+    />
+    <meta
+      property="og:image"
+      content="https://getcounts.live/android-chrome-512x512.png"
+    />
+    <meta property="og:url" content="https://getcounts.live" />
+
+    <!-- Tags Twitter Card para Twitter (opcional) -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Live Real-Time Counts" />
+    <meta
+      name="twitter:description"
+      content="Real time live counts of Views, Likes, Subscribers and Followers from several platforms: Youtube and more! Check it now at GetCounts.Live!"
+    />
+    <meta
+      name="twitter:image"
+      content="https://getcounts.live/android-chrome-512x512.png"
+    />
+*/
+};
 
 export default async function Home({ pageHref }) {
   const i18nNamespaces = ['home', 'header', 'routes'];
@@ -22,13 +73,13 @@ export default async function Home({ pageHref }) {
       <div
         id="counters"
         style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-evenly",
           maxWidth: 850,
-          alignContent: "baseline",
           margin: "auto",
-          flexWrap: 'wrap'
+          display: "flex",
+          flexWrap: 'wrap',
+          flexDirection: "row",
+          alignContent: "baseline",
+          justifyContent: "space-evenly"
         }}
       >
         <div

@@ -18,7 +18,7 @@ const preConfig = {
 }
 //TODO adicionar teste de googlebot se está retornando 200 para cada rota com conteúdo
 //TODO adicionar pipeline de verificaçao do site completo como se fosse googlebot crwaler em busaca de 301 e 404
-export default async function sitemap() {
+export default function sitemap() {
     const { schema } = i18nRouter;
     console.log("\nGerando sitemap.xml para a url:", baseUrl, "...")
     console.log(`Locale padrão: [${schema.defaultLocale}]...`)
@@ -47,4 +47,19 @@ export default async function sitemap() {
         }
     })
     return sitemap;
+}
+
+export function getPagemap(pageHref) {
+    const sitemapArray = sitemap();
+    sitemapArray.forEach((page) => {
+        console.log(pageHref, page.url.split(baseUrl))
+    })
+    const pagemap = sitemapArray.filter((page) =>
+        (page.url.split(baseUrl)[1] === pageHref) ||
+        (page.url.split(baseUrl)[1] === (pageHref + '/')))
+        .at(0)
+    // console.log(sitemapArray)
+    // console.log("PAGEMAP", pagemap)
+
+    return pagemap;
 }

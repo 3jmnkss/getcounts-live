@@ -37,7 +37,12 @@ export default function LanguageChanger({ pageHref, locale }) {
       )
     }
 
+    //TODO VRF Sancritop nao traduzindo titulo da pagina no yiutube
+    //TODO VRF suporte para frances
+    //TODO VRF suporte estranho a lingua Manipuri pelo Google Trabslate. Checar traduçao manualmente. Checar tag de rtaduçao.
    //TODO VRF pois pede RSC dá 404. Parece que tem a ver com o cache de rotas
+   //https://github.com/vercel/next.js/discussions/55011
+   //https://github.com/vercel/next.js/discussions/58357
     router.push(
       i18nRouter.getHref(
         i18nRouter.getRouteFromHref(pageHref)?.name, { locale: newLocale }

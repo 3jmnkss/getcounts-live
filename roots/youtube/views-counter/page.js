@@ -3,55 +3,32 @@ import initTranslations from '../../i18nController';
 import { i18nRouter } from '../../roots-router'
 import YTHeader from '@/components/YTHeader';
 import Footer from '@/components/Footer';
+import { getPagemap } from '@/app/sitemap';
 
 const i18nNamespaces = [
   'youtube/live-view-counter', 'youtube/common',
   'common', 'footer', 'routes', 'header'
 ];
 
+const isProd = process.env.NODE_ENV === 'production'
+const isDevBuild = process.env.NEXT_PUBLIC_DEV_BUILD === 'true'
+
 /** @type {import("next").Metadata} */
 export async function generateMetadata({ pageHref }) {
   const locale = i18nRouter.getLocaleFromHref(pageHref)
   const { t } = await initTranslations(locale, i18nNamespaces);
 
-  /*
-  <!-- Tags Open Graph para redes sociais (opcional) -->
-    <meta
-      property="og:title"
-      content="Youtube Live View Counter (in Real time) - GetCounts.Live!"
-    />
-    <meta
-      property="og:description"
-      content="Get live view counts (counter in real time) of a Youtube video, playlist or channel! Check it now on GetCounts.Live."
-    />
-    <meta
-      property="og:image"
-      content="https://getcounts.live/android-chrome-512x512.png"
-    />
-    <meta property="og:url" content="https://getcounts.live/youtube/views" />
-
-    <!-- Tags Twitter Card para Twitter (opcional) -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta
-      name="twitter:title"
-      content="Youtube Live View Counter (in Real time) - GetCounts.Live!"
-    />
-    <meta
-      name="twitter:description"
-      content="Get live view counts (counter in real time) of a Youtube video, playlist or channel! Check it now on GetCounts.Live."
-    />
-   
-    <meta
-      name="twitter:image"
-      content="https://getcounts.live/android-chrome-512x512.png"
-    />
-
-  */
+  (!isProd || isDevBuild) && console.log("PAGEMAP", getPagemap(pageHref))
 
   return {
-    //TODO capitalizar titulos
     title: t('yt-view-counter-title') + ' - GetCounts.Live!',
     description: t('yt-view-counter-description'),
+    ...(!getPagemap(pageHref) ? {} : {
+      alternates: {
+        canonical: getPagemap(pageHref).url,
+        languages: getPagemap(pageHref).alternates.languages
+      }
+    }),
   }
 }
 
