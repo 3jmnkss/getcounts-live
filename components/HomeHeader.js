@@ -8,7 +8,7 @@ const i18nNamespaces = ['header'];
 export default async function HomeHeader({ locale, simple }) {
     const { t } = await initTranslations(locale, i18nNamespaces);
 
-    
+    //TODO Adicionar icone ao bing
     //TODO criar encapsulador de Link com prefecth false
     return <header>
         <Link

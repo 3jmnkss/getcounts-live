@@ -22,7 +22,6 @@ export async function generateMetadata({ pageHref }) {
     description: t('terms-of-use', { ns: 'routes' }) + ' - GetCounts.Live!',
     ...(!getPagemap(pageHref) ? {} : {
       alternates: {
-        canonical: getPagemap(pageHref).url,
         languages: getPagemap(pageHref).alternates.languages
       }
     }),
@@ -36,7 +35,7 @@ export default async function TermsOfUse({ pageHref }) {
   return <>
     <HomeHeader simple={true} {...{ locale }} />
     <main className={[]}>
-      <h1 style={{...(isBaseLng?{}:{ textTransform: 'capitalize' })}}>{t('terms-of-use', { ns: 'routes' })}</h1>
+      <h2 style={{...(isBaseLng?{}:{ textTransform: 'capitalize' })}}>{t('terms-of-use', { ns: 'routes' })}</h2>
       <div style={{ textAlign: 'left' }} dangerouslySetInnerHTML={{ __html: t('terms-of-use-text-html') }}></div>
     </main>
     <Footer {...{ locale, pageHref }} />

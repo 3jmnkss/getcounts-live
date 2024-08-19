@@ -86,6 +86,7 @@ const main = async () => {
         // Executar a função
         MODO_DEBUG && console.log(await consultarEndpoint());
 
+        //TODO tratar caso de Mahitili vs Beahri cod iso 639-1 sob uma mesma familia hreflang invalido
         console.log("Atualizando lista de idiomas...")
         const idiomas = await consultarEndpoint({ endpoint: "/languages" });
         const locales = idiomas.map(i => i.code)

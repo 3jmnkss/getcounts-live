@@ -23,7 +23,6 @@ export async function generateMetadata({ pageHref }) {
     description: t('home-description'),
     ...(!getPagemap(pageHref) ? {} : {
       alternates: {
-        canonical: getPagemap(pageHref).url,
         languages: getPagemap(pageHref).alternates.languages
       }
     }),

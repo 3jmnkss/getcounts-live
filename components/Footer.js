@@ -34,6 +34,14 @@ export default async function Footer({ locale, pageHref, addMsg }) {
         >
             {t('terms-of-use', { ns: 'routes' })}
         </Link>
+        {' | '}
+        <Link
+            prefetch={false}
+            style={{ ...(isBaseLng ? {} : { textTransform: 'capitalize' }) }}
+            href={i18nRouter.getHref('/language-selector', { locale }) + '/'}
+        >
+            {t('language-selector', { ns: 'routes' })}
+        </Link>
         <br />
         {t('msg-no-data-collected')}
         {addMsg ? <div><br />{addMsg}</div> : ''}

@@ -21,11 +21,10 @@ export async function generateMetadata({ pageHref }) {
   (!isProd || isDevBuild) && console.log("PAGEMAP", getPagemap(pageHref))
 
   return {
-    title: t('yt-subscriber-counter-title') + ' - GetCounts.Live!',
+    title: t('yt-subscriber-counter-title'),
     description: t('yt-subscriber-counter-description'),
     ...(!getPagemap(pageHref) ? {} : {
       alternates: {
-        canonical: getPagemap(pageHref).url,
         languages: getPagemap(pageHref).alternates.languages
       }
     }),
